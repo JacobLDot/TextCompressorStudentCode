@@ -1,9 +1,6 @@
-Name: YOUR NAME HERE
+Name: Jacob Lowe
 
-| Date    |  Time  |                                     Update |
-|:--------|:------:|-------------------------------------------:|
-| April 5 | 9-10pm | I tried to write abstract, efficient code. |
-|         |        |                                            |
-
-
-To add a new row to the table, click into a cell and then hit shift-enter.
+| Date  |         Time         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  Update |
+|:------|:--------------------:|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| Dec 4 | Class & 7:30-9:00 pm | I was thinking about how to implement the textcompressor. I reviewed the program purpose and I think its probably going to be compressing the text by using common words possibly, like "and" or "the" or "of" or words like those and use headers. Adding on to that, I am also thinking that I could replace each word with a short code or something like that. I'm wondering how many bits to use per code to make sure it actually compresses the file instead of making it larger. Another Idea that I had was that we could have the frequent words have short codes and the less frequent words get long codes. |
+|       |                      |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |

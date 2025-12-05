@@ -25,7 +25,7 @@
  *  The {@code TextCompressor} class provides static methods for compressing
  *  and expanding natural language through textfile input.
  *
- *  @author Zach Blick, YOUR NAME HERE
+ *  @author Zach Blick, Jacob Lowe
  */
 public class TextCompressor {
 
@@ -33,6 +33,7 @@ public class TextCompressor {
 
         // TODO: Complete the compress() method
 
+        // assign each word a x-bit cod, where frequent words are a single byte instead of many chars
         BinaryStdOut.close();
     }
 
@@ -40,6 +41,8 @@ public class TextCompressor {
 
         // TODO: Complete the expand() method
 
+        // reverse the compression and make sure that the original text is reconstructed lossless
+        // for each code find the corresponding symbol
         BinaryStdOut.close();
     }
 
