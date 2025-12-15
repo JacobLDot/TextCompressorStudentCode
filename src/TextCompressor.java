@@ -28,21 +28,112 @@
  *  @author Zach Blick, Jacob Lowe
  */
 public class TextCompressor {
+    private static final int EOF = 128;
+    private static final int NUM_BITS = 12;
+    private static final int MAX_CODES = 4096;
 
     private static void compress() {
+        String sequence = BinaryStdIn.readString();
+        TST tst = new TST();
 
-        // TODO: Complete the compress() method
+        // Add each character from 0-127 into the TST
+        for (int i = 0; i < EOF; i++) {
+            tst.insert("" + (char) i, i);
+        }
 
-        // assign each word a x-bit cod, where frequent words are a single byte instead of many chars
+        // Extra codes start after EOF
+        int nextCode = EOF + 1;
+        int i = 0;
+
+        // Finds the longest prefix of the suffix in the TST
+        // Finds the code of that prefix, and compresses it
+        while (i < sequence.length()) {
+            String suffix = sequence.substring(i);
+            String prefix = tst.getLongestPrefix(suffix);
+
+            if (prefix.isEmpty()) {
+                prefix = suffix.substring(0, 1);
+            }
+
+            int code = tst.lookup(prefix);
+
+            // Something is wrong here
+            if (code == TST.EMPTY) {
+                break;
+            }
+
+            BinaryStdOut.write(code, NUM_BITS);
+
+            int preLen = prefix.length();
+            int seqLen = sequence.length();
+
+            // Finds next character in the sequence
+            // Adds the short sequence to the TST if not already present
+            if (i + preLen < seqLen && nextCode < MAX_CODES) {
+                char nextChar = sequence.charAt(i + preLen);
+                String addNode = prefix + nextChar;
+
+                if (tst.lookup(addNode) == TST.EMPTY) {
+                    tst.insert(addNode, nextCode++);
+                }
+            }
+
+            i += preLen;
+        }
+
+        BinaryStdOut.write(EOF, NUM_BITS);
         BinaryStdOut.close();
     }
 
     private static void expand() {
+        String[] dictionary = new String[MAX_CODES];
 
-        // TODO: Complete the expand() method
+        // Fill the dictionary with the initial 128 characters (0-127)
+        for (int i = 0; i < EOF; i++) {
+            dictionary[i] = "" + (char) i;
+        }
 
-        // reverse the compression and make sure that the original text is reconstructed lossless
-        // for each code find the corresponding symbol
+        // Extra codes start after EOF
+        int nextCode = EOF + 1;
+        int i = 0;
+
+        // If the text has reached the end of the file, end the decoding process
+        int code = BinaryStdIn.readInt(NUM_BITS);
+        if (code == EOF) {
+            BinaryStdOut.close();
+            return;
+        }
+
+        // Look up string for the first code
+        String ascVal = dictionary[code];
+
+        // Read the codes and expand the compressed text
+        while (true) {
+            BinaryStdOut.write(ascVal);
+            int nextSeq = BinaryStdIn.readInt(NUM_BITS);
+            if (nextSeq == EOF) {
+                break;
+            }
+
+            // Next ascii value is in the dictionary
+            String nextAscVal = dictionary[nextSeq];
+
+            // Edge case if the lookahead code isn't known yet
+            // The code isn't in the dictionary yet, but it has to start with the ascVal
+            // It also adds the first char from the lookahead
+            // When expanding, if we see a code that doesn't exist yet, we know it must be the next code.
+            if (nextCode == nextSeq) {
+                nextAscVal = ascVal + ascVal.charAt(0);
+            }
+
+            // Add the previous ascii value and the beginning of the next to the string
+            if (nextCode < MAX_CODES) {
+                dictionary[nextCode++] = ascVal + nextAscVal.charAt(0);
+            }
+
+            ascVal = nextAscVal;
+        }
+
         BinaryStdOut.close();
     }
 
